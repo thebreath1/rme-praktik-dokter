@@ -29,13 +29,14 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Modul Pasien (Registrasi, Daftar, Cari, Detail Rekam Medis, Edit)
-    Route::resource('patients', PatientController::class)->except(['destroy']);
+    // Modul Pasien (Registrasi, Daftar, Cari, Detail Rekam Medis, Edit, Hapus)
+    Route::resource('patients', PatientController::class);
 
     // Modul Kunjungan Medis & Resep Obat
     Route::get('/patients/{patient}/visits/create', [VisitController::class, 'create'])->name('patients.visits.create');
     Route::post('/patients/{patient}/visits', [VisitController::class, 'store'])->name('patients.visits.store');
 
-    // Modul Cetak Resep Digital (Kop Praktik, Rx, Signa, Paraf Dokter)
+    // Modul Cetak Resep Digital & Hapus Kunjungan Medis
     Route::get('/visits/{visit}/print-prescription', [VisitController::class, 'printPrescription'])->name('visits.print');
+    Route::delete('/visits/{visit}', [VisitController::class, 'destroy'])->name('visits.destroy');
 });

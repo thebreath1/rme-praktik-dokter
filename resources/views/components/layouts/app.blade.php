@@ -111,13 +111,6 @@
                             </div>
                         </a>
 
-                        <a href="{{ route('patients.create') }}" 
-                           class="px-3.5 py-2 rounded-lg text-sm font-medium transition-colors duration-150 {{ request()->routeIs('patients.create') ? 'bg-teal-50 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 font-semibold' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50' }}">
-                            <div class="flex items-center space-x-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
-                                <span>Pasien Baru</span>
-                            </div>
-                        </a>
                     </div>
                 </div>
 
@@ -145,15 +138,9 @@
                             </div>
                             <div class="hidden sm:block text-left">
                                 <span class="text-sm font-semibold text-slate-800 dark:text-slate-200 block leading-tight">{{ auth()->user()->username }}</span>
-                                @if(auth()->user()->isAdmin())
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300">
-                                        Admin / Perawat
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-sky-100 dark:bg-sky-900/60 text-sky-800 dark:text-sky-300">
-                                        Dokter
-                                    </span>
-                                @endif
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300">
+                                    Admin / Perawat
+                                </span>
                             </div>
                         </div>
 

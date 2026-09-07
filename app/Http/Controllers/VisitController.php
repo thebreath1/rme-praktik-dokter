@@ -102,4 +102,19 @@ class VisitController extends Controller
 
         return view('visits.print-prescription', compact('visit', 'clinic'));
     }
+
+    /**
+     * Hapus data kunjungan medis beserta resep obatnya
+     */
+    public function destroy(Visit $visit)
+    {
+        $visitDate = $visit->visit_date ? $visit->visit_date->format('d/m/Y') : '';
+
+        DB::transaction(function () use ($visit) {
+            $visit->prescriptions()->delete();
+            $visit->delete();
+        });
+
+        return back()->with('success', "Data kunjungan medis (tanggal {$visitDate}) berhasil dihapus.");
+    }
 }

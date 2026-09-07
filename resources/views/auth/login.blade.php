@@ -123,7 +123,7 @@
                                value="{{ old('username') }}" 
                                required 
                                autofocus
-                               placeholder="Contoh: admin atau dokter"
+                               placeholder="Contoh: admin"
                                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-150">
                     </div>
                 </div>
@@ -163,18 +163,12 @@
             <!-- Quick Demo Credentials Selector -->
             <div class="mt-6 pt-5 border-t border-slate-100 dark:border-slate-700">
                 <p class="text-xs font-medium text-slate-500 dark:text-slate-400 text-center mb-2.5">Klik untuk mengisi akun demo:</p>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="w-full">
                     <button type="button" 
                             @click="fillDemo('admin', 'admin123')"
-                            class="p-2 text-left rounded-xl bg-slate-50 dark:bg-slate-700/50 hover:bg-teal-50 dark:hover:bg-teal-900/40 border border-slate-200 dark:border-slate-600 hover:border-teal-300 dark:hover:border-teal-500 transition-colors duration-150 group">
+                            class="w-full p-2.5 text-center rounded-xl bg-slate-50 dark:bg-slate-700/50 hover:bg-teal-50 dark:hover:bg-teal-900/40 border border-slate-200 dark:border-slate-600 hover:border-teal-300 dark:hover:border-teal-500 transition-colors duration-150 group">
                         <span class="block text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-300">Admin / Perawat</span>
-                        <span class="block text-[10px] text-slate-500 dark:text-slate-400">admin / admin123</span>
-                    </button>
-                    <button type="button" 
-                            @click="fillDemo('dokter', 'dokter123')"
-                            class="p-2 text-left rounded-xl bg-slate-50 dark:bg-slate-700/50 hover:bg-sky-50 dark:hover:bg-sky-900/40 border border-slate-200 dark:border-slate-600 hover:border-sky-300 dark:hover:border-sky-500 transition-colors duration-150 group">
-                        <span class="block text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-sky-700 dark:group-hover:text-sky-300">Dokter</span>
-                        <span class="block text-[10px] text-slate-500 dark:text-slate-400">dokter / dokter123</span>
+                        <span class="block text-[10px] text-slate-500 dark:text-slate-400">Username: admin | Password: admin123</span>
                     </button>
                 </div>
             </div>

@@ -54,15 +54,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
-    }
-
-    /**
-     * Check if user is dokter
-     */
-    public function isDokter(): bool
-    {
-        return $this->role === 'dokter';
+        return true;
     }
 
     /**
@@ -70,10 +62,6 @@ class User extends Authenticatable
      */
     public function getRoleLabelAttribute(): string
     {
-        return match ($this->role) {
-            'admin' => 'Admin / Perawat',
-            'dokter' => 'Dokter Pemeriksa',
-            default => ucfirst($this->role),
-        };
+        return 'Admin / Perawat';
     }
 }

@@ -17,17 +17,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Akun Pengguna (Admin & Dokter)
+        // 1. Akun Pengguna (Admin / Perawat)
         User::create([
             'username' => 'admin',
             'password_hash' => Hash::make('admin123'),
             'role' => 'admin',
-        ]);
-
-        User::create([
-            'username' => 'dokter',
-            'password_hash' => Hash::make('dokter123'),
-            'role' => 'dokter',
         ]);
 
         // 2. Data Pasien Awal

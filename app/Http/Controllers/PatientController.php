@@ -35,10 +35,19 @@ class PatientController extends Controller
     }
 
     /**
-     * Tampilkan form registrasi pasien baru
+     * Tampilkan form registrasi pasien baru (hanya dapat diakses melalui Dashboard)
      */
-    public function create()
+    public function create(Request $request)
     {
+        $referer = $request->headers->get('referer');
+        $isFromDashboard = $request->query('from') === 'dashboard' 
+            || ($referer && str_contains($referer, route('dashboard')));
+
+        if (!$isFromDashboard) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Halaman Registrasi Pasien Baru tidak dapat diakses langsung. Silakan klik tombol "+ Pasien Baru" dari Dashboard Utama.');
+        }
+
         return view('patients.create');
     }
 
@@ -142,5 +151,24 @@ class PatientController extends Controller
 
         return redirect()->route('patients.show', $patient->id)
             ->with('success', "Data identitas pasien \"{$patient->full_name}\" berhasil diperbarui.");
+    }
+
+    /**
+     * Hapus data pasien beserta seluruh riwayat kunjungan & resep obatnya
+     */
+    public function destroy(Patient $patient)
+    {
+        $name = $patient->full_name;
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($patient) {
+            foreach ($patient->visits as $visit) {
+                $visit->prescriptions()->delete();
+                $visit->delete();
+            }
+            $patient->delete();
+        });
+
+        return redirect()->route('patients.index')
+            ->with('success', "Data pasien \"{$name}\" beserta riwayat rekam medisnya berhasil dihapus dari sistem.");
     }
 }

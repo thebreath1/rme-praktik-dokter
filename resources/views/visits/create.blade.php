@@ -32,7 +32,7 @@
                         {{ $patient->age }} Thn
                     </span>
                 </div>
-                <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono">
+                <div class="text-xs font-bold text-slate-700 dark:text-slate-300 mt-0.5 font-mono">
                     NIK: {{ $patient->nik ?? '—' }} • Telp: {{ $patient->phone }}
                 </div>
             </div>

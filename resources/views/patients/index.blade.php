@@ -9,11 +9,11 @@
             <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Daftar Pasien</h1>
             <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Kelola data pasien terdaftar dan buka riwayat rekam medis.</p>
         </div>
-        <a href="{{ route('patients.create') }}" 
-           class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-md shadow-teal-600/20 transition-all duration-150 transform active:scale-95 self-start sm:self-auto">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-            <span>Registrasi Pasien Baru</span>
-        </a>
+        <div class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 font-semibold text-xs cursor-not-allowed select-none opacity-80 self-start sm:self-auto"
+             title="Input Pasien Baru hanya dapat diakses melalui Dashboard Utama">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span>Input Pasien (Akses via Dashboard)</span>
+        </div>
     </div>
 
     <!-- FILTER & SEARCH BAR -->
@@ -129,11 +129,55 @@
                                        title="Catat Kunjungan Baru">
                                         + Kunjungan
                                     </a>
-                                    <a href="{{ route('patients.edit', $patient->id) }}" 
-                                       class="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-                                       title="Edit Data Pasien">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                                    </a>
+                                    <!-- Action Dropdown (Icon 3 Titik) -->
+                                    <div class="relative inline-block text-left" x-data="{ open: false }">
+                                        <button type="button" 
+                                                @click="open = !open" 
+                                                @click.outside="open = false"
+                                                class="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none"
+                                                title="Opsi Pasien">
+                                            <!-- Icon 3 Titik (Vertical) -->
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                                            </svg>
+                                        </button>
+
+                                        <!-- Dropdown Menu -->
+                                        <div x-show="open" 
+                                             x-transition:enter="transition ease-out duration-100"
+                                             x-transition:enter-start="transform opacity-0 scale-95"
+                                             x-transition:enter-end="transform opacity-100 scale-100"
+                                             x-transition:leave="transition ease-in duration-75"
+                                             x-transition:leave-start="transform opacity-100 scale-100"
+                                             x-transition:leave-end="transform opacity-0 scale-95"
+                                             class="absolute right-0 mt-1.5 w-40 rounded-xl bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 py-1.5 z-50 divide-y divide-slate-100 dark:divide-slate-700/60 text-left"
+                                             x-cloak>
+                                            <div class="py-0.5">
+                                                <!-- Opsi 1: Edit Profil -->
+                                                <a href="{{ route('patients.edit', $patient->id) }}" 
+                                                   class="flex items-center space-x-2 px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/70 transition-colors">
+                                                    <svg class="w-4 h-4 text-slate-400 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                                    </svg>
+                                                    <span>Edit Profil</span>
+                                                </a>
+                                            </div>
+                                            <div class="py-0.5">
+                                                <!-- Opsi 2: Hapus Data -->
+                                                <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pasien {{ $patient->full_name }}? Seluruh riwayat kunjungan dan resep pasien ini juga akan dihapus.')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" 
+                                                            class="w-full flex items-center space-x-2 px-3.5 py-2 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors text-left">
+                                                        <svg class="w-4 h-4 text-rose-500 dark:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                        </svg>
+                                                        <span>Hapus Data</span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -147,8 +191,8 @@
                                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
                                     Tidak ada pasien yang cocok dengan kata kunci "{{ $search }}". Silakan periksa kembali atau daftarkan sebagai pasien baru.
                                 </p>
-                                <a href="{{ route('patients.create') }}" class="inline-flex items-center space-x-2 mt-4 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition-colors">
-                                    <span>+ Daftarkan Pasien Ini</span>
+                                <a href="{{ route('dashboard') }}" class="inline-flex items-center space-x-2 mt-4 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition-colors">
+                                    <span>+ Input Pasien Baru via Dashboard</span>
                                 </a>
                             </td>
                         </tr>

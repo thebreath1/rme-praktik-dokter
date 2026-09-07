@@ -21,7 +21,7 @@
 
             <!-- Quick Action Buttons on Banner -->
             <div class="flex flex-wrap items-center gap-3">
-                <a href="{{ route('patients.create') }}" 
+                <a href="{{ route('patients.create', ['from' => 'dashboard']) }}" 
                    class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white text-teal-700 hover:bg-teal-50 font-bold text-sm shadow-md transition-all duration-150 transform hover:-translate-y-0.5">
                     <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                     <span>+ Pasien Baru</span>
@@ -124,10 +124,10 @@
                                 </div>
                                 <div>
                                     <div class="flex items-center space-x-2">
-                                        <a href="{{ route('patients.show', $visit->patient_id) }}" class="font-bold text-slate-800 dark:text-slate-100 hover:text-teal-600 dark:hover:text-teal-400 text-sm">
+                                        <a href="{{ route('patients.show', $visit->patient_id) }}" class="font-bold text-slate-900 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 text-sm">
                                             {{ $visit->patient->full_name }}
                                         </a>
-                                        <span class="text-xs text-slate-400 font-mono">NIK: {{ $visit->patient->nik ?? '-' }}</span>
+                                        <span class="text-xs font-bold text-slate-700 dark:text-slate-300 font-mono">NIK: {{ $visit->patient->nik ?? '-' }}</span>
                                     </div>
                                     <div class="text-xs text-slate-600 dark:text-slate-300 mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
                                         <span class="font-semibold text-slate-700 dark:text-slate-200">Diagnosis:</span>
@@ -135,10 +135,10 @@
                                         <span class="text-slate-400">•</span>
                                         <span class="text-slate-500 dark:text-slate-400 truncate max-w-xs" title="{{ $visit->complaint }}">{{ Str::limit($visit->complaint, 40) }}</span>
                                     </div>
-                                    <div class="text-[11px] text-slate-400 dark:text-slate-500 mt-1 flex items-center space-x-2">
-                                        <span>📅 {{ $visit->visit_date->translatedFormat('d F Y') }}</span>
-                                        <span>•</span>
-                                        <span>💊 {{ $visit->prescriptions->count() }} Resep Obat</span>
+                                    <div class="text-xs font-bold text-slate-700 dark:text-slate-200 mt-1 flex items-center space-x-2">
+                                        <span class="text-slate-700 dark:text-slate-200">📅 {{ $visit->visit_date->translatedFormat('d F Y') }}</span>
+                                        <span class="text-slate-400">•</span>
+                                        <span class="text-slate-700 dark:text-slate-200">💊 {{ $visit->prescriptions->count() }} Resep Obat</span>
                                     </div>
                                 </div>
                             </div>
@@ -150,6 +150,16 @@
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                                     <span>Cetak Resep</span>
                                 </a>
+                                <form action="{{ route('visits.destroy', $visit->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data kunjungan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="px-2.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold flex items-center space-x-1 transition-colors"
+                                            title="Hapus Kunjungan">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        <span>Hapus</span>
+                                    </button>
+                                </form>
                                 <a href="{{ route('patients.show', $visit->patient_id) }}" 
                                    class="px-2.5 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold transition-colors">
                                     Rekam Medis
@@ -172,7 +182,7 @@
                     <h2 class="text-lg font-bold text-slate-900 dark:text-white">Pasien Baru</h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400">Terdaftar terakhir di klinik.</p>
                 </div>
-                <a href="{{ route('patients.create') }}" class="text-xs font-bold text-teal-600 dark:text-teal-400 hover:text-teal-700">
+                <a href="{{ route('patients.create', ['from' => 'dashboard']) }}" class="text-xs font-bold text-teal-600 dark:text-teal-400 hover:text-teal-700">
                     + Tambah
                 </a>
             </div>
