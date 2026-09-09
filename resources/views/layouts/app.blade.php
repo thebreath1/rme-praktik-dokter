@@ -50,6 +50,69 @@
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmAction(event, options = {}) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const target = event.currentTarget || event.target;
+            const form = target.tagName === 'FORM' ? target : target.closest('form');
+
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            const title = options.title || 'Konfirmasi Tindakan';
+            const text = options.text || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
+            const confirmButtonText = options.confirmButtonText || 'Ya, Lanjutkan';
+            const cancelButtonText = options.cancelButtonText || 'Batal';
+            const icon = options.icon || 'warning';
+            const isDanger = options.isDanger !== undefined ? options.isDanger : true;
+
+            if (typeof Swal === 'undefined') {
+                if (window.confirm(text)) {
+                    if (form) form.submit();
+                }
+                return false;
+            }
+
+            const confirmBtnClass = isDanger 
+                ? 'px-5 py-2.5 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-700 shadow-md shadow-rose-500/20 transition-all cursor-pointer text-sm border-0 focus:outline-none'
+                : 'px-5 py-2.5 rounded-xl font-semibold text-white bg-teal-600 hover:bg-teal-700 shadow-md shadow-teal-500/20 transition-all cursor-pointer text-sm border-0 focus:outline-none';
+
+            const cancelBtnClass = 'px-5 py-2.5 rounded-xl font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-all cursor-pointer text-sm mr-2 border-0 focus:outline-none';
+
+            Swal.fire({
+                title: `<span class="text-slate-800 dark:text-white font-bold text-xl">${title}</span>`,
+                html: `<p class="text-slate-600 dark:text-slate-300 text-sm mt-2 leading-relaxed">${text}</p>`,
+                icon: icon,
+                iconColor: isDanger ? '#ef4444' : '#0d9488',
+                showCancelButton: true,
+                confirmButtonText: confirmButtonText,
+                cancelButtonText: cancelButtonText,
+                reverseButtons: true,
+                background: isDark ? '#1e293b' : '#ffffff',
+                customClass: {
+                    popup: 'rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl p-6 font-sans',
+                    confirmButton: confirmBtnClass,
+                    cancelButton: cancelBtnClass,
+                    actions: 'mt-6 gap-2'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (form) {
+                        form.submit();
+                    } else if (typeof options.onConfirm === 'function') {
+                        options.onConfirm();
+                    }
+                }
+            });
+
+            return false;
+        }
+    </script>
+
     <style>
         [x-cloak] { display: none !important; }
         @media print {
@@ -150,7 +213,14 @@
                             <button type="submit" 
                                     class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-transparent hover:border-rose-200 dark:hover:border-rose-800 transition-colors duration-150"
                                     title="Keluar dari sistem"
-                                    onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')">
+                                    onclick="return confirmAction(event, {
+                                        title: 'Konfirmasi Keluar',
+                                        text: 'Apakah Anda yakin ingin keluar dari sistem?',
+                                        confirmButtonText: 'Ya, Keluar',
+                                        cancelButtonText: 'Batal',
+                                        icon: 'question',
+                                        isDanger: true
+                                    })">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                                 <span class="hidden sm:inline">Logout</span>
                             </button>

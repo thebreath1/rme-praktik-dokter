@@ -164,7 +164,15 @@
                                             </div>
                                             <div class="py-0.5">
                                                 <!-- Opsi 2: Hapus Data -->
-                                                <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pasien {{ $patient->full_name }}? Seluruh riwayat kunjungan dan resep pasien ini juga akan dihapus.')">
+                                                <form action="{{ route('patients.destroy', $patient->id) }}" method="POST"
+                                                      onsubmit="return confirmAction(event, {
+                                                          title: 'Hapus Data Pasien',
+                                                          text: 'Apakah Anda yakin ingin menghapus data pasien {{ $patient->full_name }}? Seluruh riwayat kunjungan dan resep pasien ini juga akan dihapus.',
+                                                          confirmButtonText: 'Ya, Hapus Pasien',
+                                                          cancelButtonText: 'Batal',
+                                                          icon: 'warning',
+                                                          isDanger: true
+                                                      })">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" 
