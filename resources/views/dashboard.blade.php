@@ -23,7 +23,6 @@
             <div class="flex flex-wrap items-center gap-3">
                 <a href="{{ route('patients.create', ['from' => 'dashboard']) }}" 
                    class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white text-teal-700 hover:bg-teal-50 font-bold text-sm shadow-md transition-all duration-150 transform hover:-translate-y-0.5">
-                    <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                     <span>+ Pasien Baru</span>
                 </a>
                 <a href="{{ route('patients.index') }}" 

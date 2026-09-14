@@ -9,11 +9,6 @@
             <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Daftar Pasien</h1>
             <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Kelola data pasien terdaftar dan buka riwayat rekam medis.</p>
         </div>
-        <div class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 font-semibold text-xs cursor-not-allowed select-none opacity-80 self-start sm:self-auto"
-             title="Input Pasien Baru hanya dapat diakses melalui Dashboard Utama">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-            <span>Input Pasien (Akses via Dashboard)</span>
-        </div>
     </div>
 
     <!-- FILTER & SEARCH BAR -->
@@ -60,7 +55,7 @@
 
     <!-- PATIENT DATA TABLE -->
     <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200/80 dark:border-slate-700 shadow-sm overflow-hidden transition-colors duration-200">
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto pb-2">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="border-b border-slate-200 dark:border-slate-700 bg-slate-50/75 dark:bg-slate-900/60 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
@@ -130,10 +125,24 @@
                                         + Kunjungan
                                     </a>
                                     <!-- Action Dropdown (Icon 3 Titik) -->
-                                    <div class="relative inline-block text-left" x-data="{ open: false }">
+                                    <div class="relative inline-block text-left" 
+                                         x-data="{ open: false, topPos: 0, leftPos: 0 }" 
+                                         @click.outside="open = false"
+                                         @scroll.window="open = false"
+                                         @resize.window="open = false">
                                         <button type="button" 
-                                                @click="open = !open" 
-                                                @click.outside="open = false"
+                                                @click="
+                                                    open = !open; 
+                                                    if(open) { 
+                                                        const rect = $el.getBoundingClientRect(); 
+                                                        leftPos = rect.right - 160; 
+                                                        if (window.innerHeight - rect.bottom < 110 && rect.top > 110) {
+                                                            topPos = rect.top - 90;
+                                                        } else {
+                                                            topPos = rect.bottom + 6;
+                                                        }
+                                                    }
+                                                "
                                                 class="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none"
                                                 title="Opsi Pasien">
                                             <!-- Icon 3 Titik (Vertical) -->
@@ -144,13 +153,14 @@
 
                                         <!-- Dropdown Menu -->
                                         <div x-show="open" 
+                                             :style="`top: ${topPos}px; left: ${leftPos}px;`"
                                              x-transition:enter="transition ease-out duration-100"
                                              x-transition:enter-start="transform opacity-0 scale-95"
                                              x-transition:enter-end="transform opacity-100 scale-100"
                                              x-transition:leave="transition ease-in duration-75"
                                              x-transition:leave-start="transform opacity-100 scale-100"
                                              x-transition:leave-end="transform opacity-0 scale-95"
-                                             class="absolute right-0 mt-1.5 w-40 rounded-xl bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 py-1.5 z-50 divide-y divide-slate-100 dark:divide-slate-700/60 text-left"
+                                             class="fixed w-40 rounded-xl bg-white dark:bg-slate-800 shadow-2xl border border-slate-200 dark:border-slate-700 py-1.5 z-[9999] divide-y divide-slate-100 dark:divide-slate-700/60 text-left"
                                              x-cloak>
                                             <div class="py-0.5">
                                                 <!-- Opsi 1: Edit Profil -->
