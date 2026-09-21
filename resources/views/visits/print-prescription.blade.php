@@ -37,11 +37,12 @@
 
     <style>
         @media print {
-            body {
+            html, body {
                 background: white !important;
                 color: black !important;
                 padding: 0 !important;
                 margin: 0 !important;
+                height: auto !important;
             }
             .no-print {
                 display: none !important;
@@ -52,12 +53,22 @@
                 width: 100% !important;
                 max-width: 100% !important;
                 margin: 0 auto !important;
-                padding: 24px !important;
-                page-break-inside: avoid;
+                padding: 16px 20px !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                border-radius: 12px !important;
+            }
+            .rx-container {
+                min-height: 120px !important;
+                padding-top: 10px !important;
+                padding-bottom: 10px !important;
+            }
+            .signature-space {
+                height: 36px !important;
             }
             @page {
                 size: A5 portrait;
-                margin: 10mm;
+                margin: 6mm;
             }
         }
     </style>
@@ -109,10 +120,10 @@
     </div>
 
     <!-- OFFICIAL PRESCRIPTION SHEET (A5 Clinical Prescription Format) -->
-    <div class="prescription-sheet bg-white max-w-xl w-full rounded-3xl border-2 border-slate-300 shadow-xl p-8 text-slate-900 relative">
+    <div class="prescription-sheet bg-white max-w-xl w-full rounded-3xl border-2 border-slate-300 shadow-xl p-6 sm:p-8 text-slate-900 relative">
 
         <!-- KOP PRAKTIK DOKTER -->
-        <div class="text-center pb-4 border-b-2 border-slate-900">
+        <div class="text-center pb-3 border-b-2 border-slate-900">
             <div class="flex items-center justify-center space-x-2 mb-1">
                 <div class="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm">
                     +
@@ -123,12 +134,12 @@
             </div>
             <h2 class="text-base font-bold text-slate-800">{{ $clinic['doctor'] }}</h2>
             <p class="text-xs font-mono font-medium text-slate-600">{{ $clinic['sip'] }}</p>
-            <p class="text-[11px] text-slate-600 mt-1">{{ $clinic['address'] }}</p>
+            <p class="text-[11px] text-slate-600 mt-0.5">{{ $clinic['address'] }}</p>
             <p class="text-[10px] text-slate-500">{{ $clinic['phone'] }} • {{ $clinic['schedule'] }}</p>
         </div>
 
         <!-- META DATA (TANGGAL & NOMOR RESEP) -->
-        <div class="py-3 flex justify-between items-center text-xs border-b border-dashed border-slate-300 text-slate-700">
+        <div class="py-2 flex justify-between items-center text-xs border-b border-dashed border-slate-300 text-slate-700">
             <div>
                 <span class="font-bold">No. Rekam Medis:</span> 
                 <span class="font-mono font-semibold">RM-{{ str_pad($visit->patient->id, 5, '0', STR_PAD_LEFT) }}</span>
@@ -140,7 +151,7 @@
         </div>
 
         <!-- DAFTAR RESEP OBAT (RECIPE R/) -->
-        <div class="py-6 space-y-5 min-h-[260px]">
+        <div class="rx-container py-4 space-y-4 min-h-[140px]">
             @forelse($visit->prescriptions as $index => $rx)
                 <div class="relative pl-7 group">
                     <!-- R/ Classical Symbol -->
@@ -165,14 +176,14 @@
                     </div>
                 </div>
             @empty
-                <div class="text-center py-10 text-xs italic text-slate-400">
+                <div class="text-center py-6 text-xs italic text-slate-400">
                     — Tidak ada resep obat yang direkam pada kunjungan ini —
                 </div>
             @endforelse
         </div>
 
         <!-- CLOSING LINE (Pemisah Resep & Paraf) -->
-        <div class="relative my-4">
+        <div class="relative my-3">
             <div class="border-t-2 border-slate-900"></div>
             <!-- Closing flourish mark -->
             <div class="absolute right-8 -top-3 bg-white px-2 font-serif italic text-sm text-slate-900">
@@ -181,9 +192,9 @@
         </div>
 
         <!-- FOOTER: PRO PASIEN & PARAF DOKTER -->
-        <div class="pt-2 flex flex-col sm:flex-row justify-between items-end gap-6 text-xs">
+        <div class="pt-1 flex flex-row justify-between items-end gap-4 text-xs">
             <!-- Data Pasien (Pro:) -->
-            <div class="w-full sm:w-2/3 bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-1">
+            <div class="w-2/3 bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-1">
                 <div class="font-extrabold uppercase text-[10px] text-slate-500 tracking-wider">Pro (Untuk Pasien):</div>
                 <div class="text-sm font-bold text-slate-900">{{ $visit->patient->full_name }}</div>
                 <div class="text-slate-600 text-xs">
@@ -196,12 +207,12 @@
             </div>
 
             <!-- Kolom Tanda Tangan / Paraf Dokter -->
-            <div class="text-center w-full sm:w-1/3 shrink-0 self-end">
+            <div class="text-center w-1/3 shrink-0 self-end">
                 <p class="text-[11px] text-slate-500">Ciamis, {{ $visit->visit_date->format('d/m/Y') }}</p>
                 <p class="text-[11px] font-bold text-slate-800 mt-0.5">Dokter Pemeriksa,</p>
                 
                 <!-- Signature line -->
-                <div class="h-16 flex items-center justify-center">
+                <div class="signature-space h-12 flex items-center justify-center">
                     <span class="text-slate-300 text-xs italic no-print">(Paraf / Cap Dokter)</span>
                 </div>
 
@@ -213,7 +224,7 @@
         </div>
 
         <!-- Catatan kaki resep -->
-        <div class="mt-6 pt-3 border-t border-slate-100 text-[9px] text-slate-400 text-center uppercase tracking-wider">
+        <div class="mt-4 pt-2 border-t border-slate-100 text-[9px] text-slate-400 text-center uppercase tracking-wider">
             Resep ini dikeluarkan resmi oleh {{ $clinic['name'] }} • Berlaku untuk pengambilan obat di apotek/farmasi
         </div>
 
